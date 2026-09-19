@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bearing — find your lane on LinkedIn</title>
+<meta name="description" content="Pick your goal and category. Bearing builds the LinkedIn searches, outreach messages, and a lead tracker for it.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%230d6b70' stroke-width='2'/><path d='M16 4l4 12h-8z' fill='%230d6b70'/></svg>">
+<style>
+:root{
+  --bg:#F4F1EA; --panel:#FFFFFF; --ink:#16211F; --muted:#5B6B67; --line:#DCD5C6;
+  --field:#FBFAF6; --soft:#EAE3D3; --accent:#0d6b70; --accent-ink:#FFFFFF; --brass:#B08340;
+  --head:'Georgia','Times New Roman',serif; --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#12181A;--panel:#1B2325;--ink:#EDEFEC;--muted:#9AA6A2;--line:#2E3A3B;--field:#141B1D;--soft:#20302F;--accent:#3FBFB0;--accent-ink:#0B1414;}
+}
+:root[data-theme="dark"]{--bg:#12181A;--panel:#1B2325;--ink:#EDEFEC;--muted:#9AA6A2;--line:#2E3A3B;--field:#141B1D;--soft:#20302F;--accent:#3FBFB0;--accent-ink:#0B1414;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.45}
+h1,h2,h3{font-family:var(--head);margin:0 0 4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.top{background:#0F2A33;border-bottom:1px solid #1D4450;color:#E6EEF0}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.brand svg{width:34px;height:34px;color:#8fd8d2}
+.brand span{display:block;color:#9FB6BE;font-size:13px;max-width:340px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{background:transparent;border:1px solid transparent;color:#B6C8CE;padding:8px 14px;border-radius:999px;font:600 13.5px var(--body);cursor:pointer}
+.tab:hover{color:#fff}
+.tab[aria-selected="true"]{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.25)}
+main{max-width:1080px;margin:0 auto;padding:24px 20px 80px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.sub{color:var(--muted);font-size:14px;margin:0 0 12px}
+.lbl{display:block;font-size:12.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+input,select,textarea{width:100%;background:var(--field);border:1px solid var(--line);border-radius:8px;padding:9px 11px;color:var(--ink);font:15px var(--body)}
+textarea{resize:vertical;font-family:var(--body)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:6px}
+.chip{border:1px solid var(--line);background:var(--field);border-radius:8px;padding:9px 10px;cursor:pointer;font-size:13.5px;text-align:left}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+@media (max-width:860px){.two{grid-template-columns:1fr}.grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--field);color:var(--ink);padding:9px 14px;border-radius:8px;font:600 13.5px var(--body);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.small{padding:6px 10px;font-size:12.5px}
+.btn.danger{border-color:#B23A3A;color:#B23A3A}
+.out{background:var(--field);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:13.5px;white-space:pre-wrap;word-break:break-word;margin-top:8px}
+.links{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.linkrow{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--field)}
+.linkrow a{color:var(--accent);font-weight:700;text-decoration:none}
+.count{color:var(--muted);font-size:12.5px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.03em}
+.score{display:inline-block;min-width:28px;text-align:center;border-radius:6px;padding:2px 6px;font-weight:700;font-size:12px;background:var(--soft)}
+.score.warm{background:color-mix(in srgb,var(--brass) 30%, var(--soft));color:#7a5620}
+.score.hot{background:var(--accent);color:var(--accent-ink)}
+.empty{color:var(--muted);font-size:14px;padding:20px;text-align:center;border:1px dashed var(--line);border-radius:10px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+footer{color:var(--muted);font-size:12.5px;text-align:center;padding:20px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 4l4 12h-8z" fill="currentColor"/><path d="M16 28l-4-12h8z" fill="currentColor" opacity=".35"/><circle cx="16" cy="16" r="2" fill="#0F2A33"/></svg>
+      <div><h1 style="color:#fff;font-size:20px">Bearing</h1><span>Set the target once. Get the searches, the messages, and a lead tracker.</span></div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" id="t-find" role="tab" aria-selected="true" data-tab="find">Find</button>
+      <button class="tab" id="t-leads" role="tab" aria-selected="false" data-tab="leads">Leads</button>
+      <button class="tab" id="t-settings" role="tab" aria-selected="false" data-tab="settings">Settings</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="tab-find">
+  <div class="card">
+    <h2>1. What are you doing on LinkedIn?</h2>
+    <p class="sub">This decides which search links get built.</p>
+    <div class="grid" id="goalGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>2. Your category</h2>
+    <p class="sub">Pick the closest match. You can refine with keywords below.</p>
+    <div class="grid" id="catGrid"></div>
+    <label class="lbl" for="role">Specific role or keyword (optional)</label>
+    <input id="role" type="text" placeholder="e.g. Head of Growth, dental clinics, React developer">
+    <div class="two">
+      <div>
+        <label class="lbl" for="loc">Location (optional)</label>
+        <input id="loc" type="text" placeholder="e.g. Karachi, Remote, United Kingdom">
+      </div>
+      <div>
+        <label class="lbl" for="kw">Must include keyword (optional)</label>
+        <input id="kw" type="text" placeholder="e.g. founder, agency, hiring">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. Your search links</h2>
+    <p class="sub">Each opens LinkedIn's own search in a new tab — nothing is scraped or automated.</p>
+    <div class="links" id="linkOut"></div>
+    <label class="lbl">Copy-ready search text</label>
+    <div class="out" id="queryOut"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn primary" id="copyQuery">Copy search text</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>4. Outreach message</h2>
+    <p class="sub">A starting point — always personalize the bracketed part before sending.</p>
+    <label class="lbl" for="msgOut">Connection note</label>
+    <div class="out" id="msgOut"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="copyMsg">Copy message</button>
+    </div>
+  </div>
+</section>
+
+<section id="tab-leads" hidden>
+  <div class="card">
+    <h2>Import leads</h2>
+    <p class="sub">Paste lines like <em>Name - Title at Company, City</em>, or a CSV with headers. One per line.</p>
+    <textarea id="importText" rows="5" placeholder="Ayesha Khan - CEO at BrightLoop, Karachi&#10;Daniel Ortiz | VP of Sales | Northwind Freight | Austin"></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="btn primary" id="btnImport">Import</button>
+      <button class="btn" id="btnSample">Load sample data</button>
+      <span class="count" id="importMsg"></span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <h2 style="margin:0">Your leads (<span id="leadCount">0</span>)</h2>
+      <div class="row">
+        <input id="searchLeads" type="text" placeholder="Search name, title, company…" style="width:220px">
+        <button class="btn small" id="btnExport">Download CSV</button>
+        <button class="btn small danger" id="btnClear">Clear all</button>
+      </div>
+    </div>
+    <div id="leadTableWrap"></div>
+  </div>
+</section>
+
+<section id="tab-settings" hidden>
+  <div class="two">
+    <div class="card">
+      <h2>Appearance</h2>
+      <label class="lbl" for="cfgAccent">Accent color</label>
+      <input type="color" id="cfgAccent" style="height:40px;padding:2px">
+      <label class="lbl" for="cfgTheme">Theme</label>
+      <select id="cfgTheme"><option value="auto">Match my device</option><option value="light">Light</option><option value="dark">Dark</option></select>
+    </div>
+    <div class="card">
+      <h2>Backup</h2>
+      <p class="sub">Everything lives in this browser's storage only.</p>
+      <div class="row">
+        <button class="btn primary" id="btnBackup">Download backup</button>
+        <label class="btn" style="cursor:pointer">Restore<input type="file" id="restoreFile" accept=".json" hidden></label>
+        <button class="btn danger" id="btnReset">Erase everything</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>Bearing opens LinkedIn's own search pages for you. It does not log in, scrape, or automate your account.</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const GOALS = {
+  job: {label:'Find a job', people:'&keywords=', extra:'hiring'},
+  clients: {label:'Find clients', people:'&keywords=', extra:''},
+  hire: {label:'Hire people', people:'&keywords=', extra:'open to work'},
+  network: {label:'Build a network', people:'&keywords=', extra:''}
+};
+const CATS = {
+  'Data & AI':'data scientist OR machine learning OR AI engineer',
+  'Software Engineering':'software engineer OR backend OR frontend developer',
+  'Sales':'sales OR account executive OR business development',
+  'Marketing':'marketing OR growth OR brand manager',
+  'Product':'product manager OR product owner',
+  'Design':'product designer OR UX designer',
+  'Recruiting & HR':'recruiter OR talent acquisition OR HR',
+  'Finance':'finance OR CFO OR financial analyst',
+  'Legal':'lawyer OR general counsel OR legal counsel',
+  'Healthcare':'healthcare OR clinic OR hospital administrator',
+  'Real Estate':'real estate OR property manager OR realtor',
+  'Consulting':'consultant OR strategy consultant',
+  'E-commerce':'e-commerce OR online retail OR DTC',
+  'Manufacturing':'manufacturing OR operations OR supply chain',
+  'Education':'education OR school OR university admin',
+  'Founders & Startups':'founder OR co-founder OR startup CEO'
+};
+
+let S = JSON.parse(localStorage.getItem('bearing.state')||'{}');
+S.goal = S.goal || 'clients'; S.cat = S.cat || 'Data & AI'; S.cfg = S.cfg || {accent:'', theme:'auto'};
+let L = JSON.parse(localStorage.getItem('bearing.leads')||'[]');
+function save(){ localStorage.setItem('bearing.state', JSON.stringify(S)); localStorage.setItem('bearing.leads', JSON.stringify(L)); }
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),1800); }
+async function copyText(t){ try{ await navigator.clipboard.writeText(t); return true; }catch(e){ try{ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); return true; }catch(e2){ return false; } } }
+
+function buildGrids(){
+  $('#goalGrid').innerHTML = Object.keys(GOALS).map(k=>`<button class="chip" data-goal="${k}" aria-pressed="${k===S.goal}">${GOALS[k].label}</button>`).join('');
+  $('#catGrid').innerHTML = Object.keys(CATS).map(k=>`<button class="chip" data-cat="${esc(k)}" aria-pressed="${k===S.cat}">${esc(k)}</button>`).join('');
+}
+function query(){
+  let base = CATS[S.cat] || S.cat;
+  const role = $('#role').value.trim(), kw = $('#kw').value.trim();
+  let q = role ? `(${base}) AND (${role})` : base;
+  if(kw) q += ` AND ${kw}`;
+  if(S.goal==='job') q += ' AND hiring';
+  if(S.goal==='hire') q += ' AND "open to work"';
+  return q;
+}
+function render(){
+  const q = query(), loc = $('#loc').value.trim();
+  const enc = encodeURIComponent(q);
+  const locParam = loc ? `&geoUrn=&location=${encodeURIComponent(loc)}` : '';
+  const links = [
+    ['People', `https://www.linkedin.com/search/results/people/?keywords=${enc}${locParam}&origin=GLOBAL_SEARCH_HEADER`],
+    ['Jobs', `https://www.linkedin.com/jobs/search/?keywords=${enc}${loc?`&location=${encodeURIComponent(loc)}`:''}`],
+    ['Companies', `https://www.linkedin.com/search/results/companies/?keywords=${enc}&origin=GLOBAL_SEARCH_HEADER`],
+    ['Posts', `https://www.linkedin.com/search/results/content/?keywords=${enc}&origin=GLOBAL_SEARCH_HEADER`],
+    ['Groups', `https://www.linkedin.com/search/results/groups/?keywords=${enc}&origin=GLOBAL_SEARCH_HEADER`]
+  ];
+  $('#linkOut').innerHTML = links.map(([label,url])=>`<div class="linkrow"><span>${label}</span><a href="${url}" target="_blank" rel="noopener noreferrer">Open →</a></div>`).join('');
+  $('#queryOut').textContent = q + (loc?` — location: ${loc}`:'');
+  const goalLabel = GOALS[S.goal].label.toLowerCase();
+  $('#msgOut').textContent = `Hi [First name], I noticed your work in ${S.cat.toLowerCase()} and wanted to connect. I'm currently looking to ${goalLabel==='find a job'?'move into a role like yours':goalLabel} and thought your perspective would be valuable — open to a short chat?`;
+}
+function switchTab(name){
+  ['find','leads','settings'].forEach(n=>{ $('#tab-'+n).hidden = n!==name; $('#t-'+n).setAttribute('aria-selected', String(n===name)); });
+  if(name==='leads') renderLeads();
+}
+
+// ---- leads ----
+const SENIORITY_RULES = [
+  [/\b(ceo|chief executive|founder|co-founder|owner)\b/i,'C-level'],
+  [/\b(cto|cfo|coo|cmo|chief)\b/i,'C-level'],
+  [/\b(vp|vice president)\b/i,'VP'],
+  [/\bdirector|head of\b/i,'Director'],
+  [/\bmanager|lead\b/i,'Manager'],
+  [/\bsenior|sr\.?\b/i,'Senior'],
+  [/\bjunior|jr\.?|intern|associate\b/i,'Junior']
+];
+function parseLine(line){
+  line = line.trim(); if(!line) return null;
+  let name='',title='',company='',loc='';
+  let parts = line.split(/\s*[-|,]\s*at\s+/i);
+  if(parts.length>=2){
+    let head = parts[0], rest = parts.slice(1).join(' at ');
+    let hp = head.split(/\s*[-|]\s*/);
+    name = hp[0].trim(); title = hp.slice(1).join(' - ').trim();
+    let rp = rest.split(',');
+    company = rp[0].trim(); loc = rp.slice(1).join(',').trim();
+  } else {
+    let p = line.split(/\s*[-|]\s*/);
+    name = (p[0]||'').trim(); title=(p[1]||'').trim(); company=(p[2]||'').trim(); loc=(p[3]||'').trim();
+  }
+  if(!name) return null;
+  let seniority='Mid'; for(const [re,lab] of SENIORITY_RULES){ if(re.test(title)){ seniority=lab; break; } }
+  return {id: Date.now()+'-'+Math.random().toString(36).slice(2,7), name, title, company, loc, seniority, status:'New'};
+}
+function doImport(text){
+  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
+  let added=0, dup=0;
+  for(const line of lines){
+    if(/^name\s*,/i.test(line)) continue;
+    const l = parseLine(line); if(!l) continue;
+    if(L.some(x=>x.name.toLowerCase()===l.name.toLowerCase() && x.company.toLowerCase()===l.company.toLowerCase())){ dup++; continue; }
+    L.push(l); added++;
+  }
+  save();
+  $('#importMsg').textContent = `${added} added${dup?`, ${dup} duplicates skipped`:''}.`;
+  renderLeads();
+}
+function score(l){
+  let s = 30;
+  if(l.seniority==='C-level') s+=40; else if(l.seniority==='VP') s+=30; else if(l.seniority==='Director') s+=22; else if(l.seniority==='Manager') s+=12; else if(l.seniority==='Senior') s+=8;
+  if(l.company) s+=10;
+  if(l.loc) s+=5;
+  return Math.min(100, s);
+}
+function renderLeads(){
+  $('#leadCount').textContent = L.length;
+  const q = ($('#searchLeads').value||'').toLowerCase();
+  const rows = L.filter(l => !q || (l.name+l.title+l.company).toLowerCase().includes(q))
+    .map(l=>({l,s:score(l)})).sort((a,b)=>b.s-a.s);
+  if(!rows.length){ $('#leadTableWrap').innerHTML = '<div class="empty">No leads yet. Paste some above or load sample data.</div>'; return; }
+  $('#leadTableWrap').innerHTML = `<table><thead><tr><th>Score</th><th>Name</th><th>Title</th><th>Company</th><th>Level</th><th>Status</th><th></th></tr></thead><tbody>` +
+    rows.map(({l,s})=>`<tr><td><span class="score ${s>=70?'hot':s>=45?'warm':''}">${s}</span></td><td>${esc(l.name)}</td><td>${esc(l.title)}</td><td>${esc(l.company)}</td><td>${esc(l.seniority)}</td>` +
+      `<td><select data-id="${l.id}" class="statusSel">${['New','Contacted','Replied','Meeting','Won','Lost'].map(o=>`<option${o===l.status?' selected':''}>${o}</option>`).join('')}</select></td>` +
+      `<td><button class="btn small danger" data-del="${l.id}">✕</button></td></tr>`).join('') + '</tbody></table>';
+  $$('.statusSel').forEach(sel=>sel.addEventListener('change', e=>{ const l=L.find(x=>x.id===e.target.dataset.id); if(l){ l.status=e.target.value; save(); } }));
+  $$('[data-del]').forEach(b=>b.addEventListener('click', e=>{ L = L.filter(x=>x.id!==e.target.dataset.del); save(); renderLeads(); }));
+}
+function toCsv(){
+  const head = ['Name','Title','Company','Location','Seniority','Score','Status'];
+  const rows = L.map(l=>[l.name,l.title,l.company,l.loc,l.seniority,score(l),l.status]);
+  const esc2 = v => `"${String(v??'').replace(/"/g,'""')}"`;
+  return [head.map(esc2).join(','), ...rows.map(r=>r.map(esc2).join(','))].join('\r\n');
+}
+function download(name, text, mime){
+  const url = URL.createObjectURL(new Blob([text],{type:mime+';charset=utf-8'}));
+  const a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+
+// ---- settings ----
+function applyCfg(){
+  const root = document.documentElement;
+  if(S.cfg.theme==='light'||S.cfg.theme==='dark') root.setAttribute('data-theme',S.cfg.theme); else root.removeAttribute('data-theme');
+  if(/^#[0-9a-f]{6}$/i.test(S.cfg.accent||'')) root.style.setProperty('--accent', S.cfg.accent); else root.style.removeProperty('--accent');
+}
+
+// ---- events ----
+document.addEventListener('click', e=>{
+  const g = e.target.closest('[data-goal]'); if(g){ S.goal=g.dataset.goal; save(); buildGrids(); render(); return; }
+  const c = e.target.closest('[data-cat]'); if(c){ S.cat=c.dataset.cat; save(); buildGrids(); render(); return; }
+  const t = e.target.closest('.tab'); if(t){ switchTab(t.dataset.tab); return; }
+});
+['role','loc','kw'].forEach(id=> $('#'+id).addEventListener('input', render));
+$('#copyQuery').addEventListener('click', async()=> toast(await copyText($('#queryOut').textContent) ? 'Copied' : 'Could not copy'));
+$('#copyMsg').addEventListener('click', async()=> toast(await copyText($('#msgOut').textContent) ? 'Copied' : 'Could not copy'));
+$('#btnImport').addEventListener('click', ()=> doImport($('#importText').value));
+$('#btnSample').addEventListener('click', ()=> doImport(['Ayesha Khan - CEO at BrightLoop, Karachi','Daniel Ortiz - VP of Sales at Northwind Freight, Austin','Priya Nair - Head of Data at Lumen Health, Bengaluru','Tom Becker - Senior Software Engineer at Stackly, Berlin','Sara Lindqvist - Talent Acquisition Manager at Fjord Retail, Stockholm'].join('\n')));
+$('#searchLeads').addEventListener('input', renderLeads);
+$('#btnExport').addEventListener('click', ()=>{ if(!L.length){ toast('No leads to export'); return; } download('bearing-leads.csv', toCsv(), 'text/csv'); toast('CSV downloaded'); });
+$('#btnClear').addEventListener('click', ()=>{ if(confirm('Delete all leads?')){ L=[]; save(); renderLeads(); } });
+$('#cfgAccent').addEventListener('input', e=>{ S.cfg.accent=e.target.value; save(); applyCfg(); });
+$('#cfgTheme').addEventListener('change', e=>{ S.cfg.theme=e.target.value; save(); applyCfg(); });
+$('#btnBackup').addEventListener('click', ()=>{ download('bearing-backup.json', JSON.stringify({S,L}), 'application/json'); toast('Backup downloaded'); });
+$('#restoreFile').addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = ()=>{ try{ const d = JSON.parse(rd.result); if(!confirm('Replace current data with this backup?')) return; S=d.S||S; L=d.L||L; save(); buildGrids(); render(); renderLeads(); applyCfg(); toast('Restored'); }catch(err){ toast('Invalid backup file'); } };
+  rd.readAsText(f);
+});
+$('#btnReset').addEventListener('click', ()=>{ if(confirm('Erase everything stored in this browser?')){ localStorage.removeItem('bearing.state'); localStorage.removeItem('bearing.leads'); location.reload(); } });
+
+// init
+$('#cfgAccent').value = /^#[0-9a-f]{6}$/i.test(S.cfg.accent||'') ? S.cfg.accent : '#0d6b70';
+$('#cfgTheme').value = S.cfg.theme;
+applyCfg(); buildGrids(); render(); renderLeads();
+</script>
+</body>
+</html>
