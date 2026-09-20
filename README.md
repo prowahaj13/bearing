@@ -2,7 +2,7 @@
 
 A lightweight, client-side static web application designed to streamline professional networking by generating targeted LinkedIn search links, drafting outreach messages, and managing leads directly in your browser[cite: 4, 10].
 
-![Bearing Screenshot](https://bearing-ok.netlify.app/)
+![Website Here](https://bearing-ok.netlify.app/)
 
 ## ✨ Features
 
