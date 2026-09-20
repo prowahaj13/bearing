@@ -3,10 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>Bearing — find your lane on LinkedIn</title>
 <meta name="description" content="Pick your goal and category. Bearing builds the LinkedIn searches, outreach messages, and a lead tracker for it.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%230d6b70' stroke-width='2'/><path d='M16 4l4 12h-8z' fill='%230d6b70'/></svg>">
 <link rel="stylesheet" href="css/style.css">
+
+<!--
+  GOOGLE ANALYTICS 4
+  Replace G-XXXXXXXXXX with your real Measurement ID from
+  analytics.google.com (Admin > Data Streams > your web stream).
+  Until you replace it, this snippet is inert (gtag.js will 404 quietly
+  and no events are sent) — it will NOT report fake traffic.
+-->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 </head>
 <body>
 
@@ -63,9 +79,11 @@
   </div>
 
   <div class="card">
-    <h2>4. Outreach message</h2>
+    <h2>4. Outreach message <span id="tplBadge"></span></h2>
     <p class="sub">A starting point — always personalize the bracketed part before sending.</p>
-    <label class="lbl" for="msgOut">Connection note</label>
+    <label class="lbl" for="tplSelect">Template</label>
+    <select id="tplSelect"></select>
+    <label class="lbl">Preview</label>
     <div class="out" id="msgOut"></div>
     <div class="row" style="margin-top:10px">
       <button class="btn" id="copyMsg">Copy message</button>
@@ -90,6 +108,7 @@
       <div class="row">
         <input id="searchLeads" type="text" placeholder="Search name, title, company…" style="width:220px">
         <button class="btn small" id="btnExport">Download CSV</button>
+        <button class="btn small" id="btnExportPro">Download detailed CSV <span class="badge">Pro</span></button>
         <button class="btn small danger" id="btnClear">Clear all</button>
       </div>
     </div>
@@ -115,6 +134,27 @@
         <button class="btn danger" id="btnReset">Erase everything</button>
       </div>
     </div>
+  </div>
+
+  <div class="card proBox" id="proCard">
+    <h2>Bearing Pro <span class="badge">One-time</span></h2>
+    <p class="sub" id="proStatusText">Unlocks 4 extra message templates and a detailed CSV export (adds score breakdown, seniority, and status timestamps).</p>
+    <div class="row" id="proBuyRow">
+      <!--
+        LEMON SQUEEZY CHECKOUT
+        Replace this href with your real product checkout URL from
+        app.lemonsqueezy.com (Products > your product > Copy checkout link).
+        This link alone does not grant Pro access — the buyer receives a
+        license key after purchase, which they paste below to activate.
+      -->
+      <a class="btn gold" id="buyLink" href="https://YOUR-STORE.lemonsqueezy.com/checkout/buy/YOUR-VARIANT-ID" target="_blank" rel="noopener noreferrer">Buy Pro — $15 one-time</a>
+    </div>
+    <label class="lbl" for="licenseKey">Have a license key? Activate it</label>
+    <div class="row">
+      <input type="text" id="licenseKey" placeholder="XXXX-XXXX-XXXX-XXXX" style="flex:1 1 240px">
+      <button class="btn" id="btnActivate" style="flex:0 0 auto">Activate</button>
+    </div>
+    <p class="count" id="proHint" style="margin-top:8px"></p>
   </div>
 </section>
 
