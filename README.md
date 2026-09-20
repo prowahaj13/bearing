@@ -1,38 +1,35 @@
 # Bearing — static LinkedIn workflow app
 
-This project is a lightweight static site for generating LinkedIn search links, drafting outreach messages, and tracking leads in-browser.
+A lightweight, client-side static web application designed to streamline professional networking by generating targeted LinkedIn search links, drafting outreach messages, and managing leads directly in your browser[cite: 4, 10].
 
-## Project structure
+![Bearing Screenshot](https://bearing-ok.netlify.app/)
 
-- `index.html` — app shell
-- `css/style.css` — visual design and responsive layout
-- `js/script.js` — app logic and local lead tracking
-- `assets/` — images, icons, and screenshots
-- `docs/` — product, technical, deployment, roadmap, and acquisition notes
-- `demo/` — demo walkthrough materials
-- `netlify.toml` — Netlify deploy configuration
-- `LICENSE` — MIT license
+## ✨ Features
 
-## Deploy in under a minute
+- **Targeted Search Builder:** Quickly generate clean search queries and open LinkedIn's native search pages for specific roles, industries, and locations[cite: 4].
+- **Outreach Message Generator:** Draft customizable connection notes and templates to jumpstart networking[cite: 4].
+- **In-Browser Lead Tracker:** Import, manage, and search leads (`Name`, `Title`, `Company`, `City`) with local CSV export functionality[cite: 4].
+- **Customization & Backup:** Personalize your experience with custom accent colors, theme switching, and full local data backup/restore capabilities[cite: 5, 6].
 
-**Option A — drag and drop**
-1. Go to https://app.netlify.com/drop
-2. Drag this whole folder onto the page.
-3. Netlify gives you a live URL immediately.
+## 🛠️ Tech Stack
 
-**Option B — Netlify CLI**
-```bash
-npm install -g netlify-cli
-cd bearing-site
-netlify deploy --prod
-```
+- **HTML5** — App structure and markup[cite: 10]
+- **CSS3** — Custom styling, responsive layout, and dynamic variables[cite: 6, 10]
+- **JavaScript (ES6+)** — Client-side application logic and local storage management[cite: 10]
 
-**Option C — Git-based deploy**
-1. Push this folder to a GitHub/GitLab repo.
-2. In Netlify: "Add new site" → "Import an existing project".
-3. Leave the build command blank and set publish directory to `.`.
+## 🚀 Quick Deploy
 
-## Notes
-- All stored data lives in the visitor's browser (`localStorage`) and does not sync between devices.
-- The app opens LinkedIn's native search pages; it does not log in or automate accounts.
-- To adjust theme or accent styling, edit the CSS variables in `css/style.css`.
+You can deploy this project instantly using Netlify:
+
+1. Drag and drop your project folder onto [Netlify Drop](https://app.netlify.com/drop)[cite: 7].
+2. Netlify will instantly generate a live URL for your site[cite: 7].
+
+## 📌 Notes
+
+- **Privacy First:** All stored data lives entirely in the visitor's browser (`localStorage`) and does not sync between devices or external servers[cite: 6].
+- **No Automation:** The app opens LinkedIn's native search pages safely; it does not log into, scrape, or automate your LinkedIn account[cite: 6].
+- **Styling:** To adjust themes or accent colors, modify the CSS variables in `css/style.css`[cite: 6].
+
+## 📄 License
+
+This project is open-source and available under the [MIT License](LICENSE)[cite: 10].
